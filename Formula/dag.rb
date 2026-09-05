@@ -1,8 +1,8 @@
 class Dag < Formula
   desc "DNS Anomaly Generator - High-performance DNS query tool and protocol fuzzer"
   homepage "https://github.com/NoelMinamino/KariDNS"
-  url "https://github.com/NoelMinamino/KariDNS/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "668e4cea5ea9d7b699640cb6442d52656ffd0008c62e33dca91310e076601b41"
+  url "https://github.com/NoelMinamino/KariDNS/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "d32f5d29c7ec15f43b9c070e79076e6e7a58d258746562ececdd42e2638e38f7"
   license "BSD-2-Clause"
 
   depends_on "openssl@3"
