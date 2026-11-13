@@ -1,22 +1,25 @@
 class Dag < Formula
   desc "DNS Anomaly Generator - High-performance DNS query tool and protocol fuzzer"
   homepage "https://github.com/NoelMinamino/KariDNS"
-  url "https://github.com/NoelMinamino/KariDNS/archive/refs/tags/v0.6.1.tar.gz"
-  sha256 "e075408b558ca93dac489ef021dd6de3f6e8552a7f96c65dad1b7fe09a95b85e"
+  url "https://github.com/NoelMinamino/KariDNS/archive/refs/tags/v0.6.2.tar.gz"
+  sha256 "9eac9229e54bc598c2df2669ae35fcd3b8388f38eab47e1692ccbe5703a754b2"
   license "MIT"
 
+  depends_on "pkgconf" => :build
   depends_on "openssl@3"
   depends_on "zlib"
   depends_on "libidn2" => :optional
 
   def install
-    ENV.append "CFLAGS", "-I#{Formula["openssl@3"].opt_include}"
-    ENV.append "LDFLAGS", "-L#{Formula["openssl@3"].opt_lib}"
-    if build.with? "libidn2"
-      ENV.append "CFLAGS", "-I#{Formula["libidn2"].opt_include} -DHAVE_LIBIDN2"
-      ENV.append "LDFLAGS", "-L#{Formula["libidn2"].opt_lib} -lidn2"
-    end
+    # ./configure writes config.mk, which the make of macOS (GNU make 3.81) needs; it finds libidn2 with pkg-config (docs/building.md)
+    args = %W[
+      --prefix=#{prefix}
+      --with-openssl=#{Formula["openssl@3"].opt_prefix}
+      --with-db-drivers=none
+    ]
+    args << (build.with?("libidn2") ? "--with-idn2=yes" : "--with-idn2=no")
 
+    system "./configure", *args
     system "make", "dag"
     bin.install "dag"
     doc.install "README.md", "docs/dag.md" if File.exist?("docs/dag.md")
